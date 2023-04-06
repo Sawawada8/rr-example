@@ -1,0 +1,28 @@
+server:
+  command: "php worker.php"
+
+http:
+  address: 0.0.0.0:8080
+  middleware: [ "static" ]
+  pool:
+    num_workers: 4
+  static:
+    dir: "./static"
+    forbid: [ "" ]
+    calculate_etag: false
+    weak: false
+    allow: [ ".html", ".css" ]
+    request:
+      input: "custom-header"
+    response:
+      output: "output-header"
+
+logs:
+  mode: production
+  output: stderr
+  file_logger_options:
+    log_output: "./logs/my.log"
+    max_size: 100
+    max_age: 1
+    max_backups : 5
+    compress: false

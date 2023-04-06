@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  php:
+    image: myphp:1.0.0
+    build:
+      context: '.'
+      dockerfile: './docker/php/Dockerfile'
+    ports:
+      - 8888:8080
+      # http://localhost:8888
+    volumes:
+      - './:/app'
+    tty: true
+    working_dir: '/app'
+
+  mysql:
+    image: 'mysql:8.0'
+    ports:
+      - '3336:3306'
+    expose:
+      - 3336
+    environment:
+      MYSQL_DATABASE: sample
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      MYSQL_TCP_PORT: 3336
+    volumes:
+      - mysql_volume:/var/lib/mysql
+      - ./docker/mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+
+  phpmyadmin:
+    image: 'phpmyadmin/phpmyadmin'
+    ports:
+      - '2223:80'
+      # http://localhost:2223  user: root, pass: ''
+    environment:
+      PMA_HOST: 'mysql'
+      PMA_PORT: '3336'
+    depends_on:
+      - mysql
+
+
+volumes:
+  mysql_volume:
+    driver: local
