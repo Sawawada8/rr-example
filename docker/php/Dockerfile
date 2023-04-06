@@ -6,11 +6,8 @@ RUN apt-get update && \
         libicu-dev
 RUN docker-php-ext-install intl pdo_mysql
 
-# for rr
 RUN docker-php-ext-install sockets
 
-# grpc
-# RUN pecl install grpc && docker-php-ext-enable grpc
 
 # xdebug
 RUN pecl install xdebug && docker-php-ext-enable xdebug
